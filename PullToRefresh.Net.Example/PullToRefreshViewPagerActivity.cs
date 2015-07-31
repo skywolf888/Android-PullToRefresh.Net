@@ -37,11 +37,9 @@ using System.Text;
 using Android.App;
 using Android.Content;
 using Android.OS;
-//using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Com.Handmark.PullToRefresh.Library;
-//using Mode = Com.Handmark.PullToRefresh.Library.PtrMode;
 using Android.Support.V4.App;
 using Android.Support.V4;
 using Android.Support.V4.View;
@@ -50,39 +48,39 @@ using System.Threading;
 
 namespace PullToRefresh.Net.Example
 {
-     
-	[Activity(Label = "PullToRefreshViewPagerActivity")]		 
-	public sealed class PullToRefreshViewPagerActivity : Activity, OnRefreshListener<ViewPager>
-	{
-        
-		private PullToRefreshViewPager mPullToRefreshViewPager;
 
-		//@Override
-		protected override void OnCreate(Bundle savedInstanceState)
-		{
-			base.OnCreate(savedInstanceState);
-			SetContentView(Resource.Layout.activity_ptr_viewpager);
+    [Activity(Label = "PullToRefreshViewPagerActivity")]
+    public sealed class PullToRefreshViewPagerActivity : Activity, OnRefreshListener<ViewPager>
+    {
 
-			mPullToRefreshViewPager = (PullToRefreshViewPager)FindViewById(Resource.Id.pull_refresh_viewpager);
-			mPullToRefreshViewPager.setOnRefreshListener(this);
+        private PullToRefreshViewPager mPullToRefreshViewPager;
 
-			ViewPager vp = mPullToRefreshViewPager.getRefreshableView();
-			vp.Adapter =new SamplePagerAdapter();
-		}
+        //@Override
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.activity_ptr_viewpager);
 
-		//@Override
-		public void onRefresh(PullToRefreshBase<ViewPager> refreshView)
-		{
-			new GetDataTask(this).Execute();
-		}
+            mPullToRefreshViewPager = (PullToRefreshViewPager)FindViewById(Resource.Id.pull_refresh_viewpager);
+            mPullToRefreshViewPager.setOnRefreshListener(this);
 
-		class SamplePagerAdapter : PagerAdapter
-		{
+            ViewPager vp = mPullToRefreshViewPager.getRefreshableView();
+            vp.Adapter = new SamplePagerAdapter();
+        }
+
+        //@Override
+        public void onRefresh(PullToRefreshBase<ViewPager> refreshView)
+        {
+            new GetDataTask(this).Execute();
+        }
+
+        class SamplePagerAdapter : PagerAdapter
+        {
 
             private static int[] sDrawables = { Resource.Drawable.wallpaper, Resource.Drawable.wallpaper, Resource.Drawable.wallpaper,
 				Resource.Drawable.wallpaper, Resource.Drawable.wallpaper, Resource.Drawable.wallpaper };
 
-			//@Override
+            //@Override
 
             public override int Count
             {
@@ -98,24 +96,25 @@ namespace PullToRefresh.Net.Example
                 container.AddView(imageView, Android.Views.ViewGroup.LayoutParams.MatchParent, Android.Views.ViewGroup.LayoutParams.MatchParent);
 
                 return imageView;
-            }            
-			//@Override
+            }
+
+            //@Override
 
             public override void DestroyItem(ViewGroup container, int position, Java.Lang.Object @object)
             {
-                container.RemoveView((View) @object);
+                container.RemoveView((View)@object);
             }
 
 
             public override bool IsViewFromObject(View view, Java.Lang.Object @object)
             {
-                return view ==  @object;
+                return view == @object;
             }
-			
-		}
 
-		private class GetDataTask : AsyncTask<Java.Lang.Void, Java.Lang.Void, Java.Lang.Void>
-		{
+        }
+
+        private class GetDataTask : AsyncTask<Java.Lang.Void, Java.Lang.Void, Java.Lang.Void>
+        {
 
 
             PullToRefreshViewPagerActivity inst;
@@ -124,7 +123,6 @@ namespace PullToRefresh.Net.Example
             {
                 inst = instance;
             }
-
 
             protected override Java.Lang.Void RunInBackground(params Java.Lang.Void[] @params)
             {
@@ -137,15 +135,6 @@ namespace PullToRefresh.Net.Example
                 }
                 return null;
             }
-			//@Override
-			//protected Void doInBackground(Void... params) {
-			//    // Simulates a background job.
-			//    try {
-			//        Thread.sleep(4000);
-			//    } catch (InterruptedException e) {
-			//    }
-			//    return null;
-			//}
 
             protected override void OnPostExecute(Java.Lang.Object result)
             {
@@ -153,8 +142,8 @@ namespace PullToRefresh.Net.Example
                 base.OnPostExecute(result);
             }
 
-			 
-		}
 
-	}
+        }
+
+    }
 }
