@@ -35,100 +35,112 @@ using System;
 namespace Com.Handmark.PullToRefresh.Library
 {
 
-public class PullToRefreshScrollView : PullToRefreshBase<ScrollView> {
-
-	public PullToRefreshScrollView(Context context)
-        :base(context)
-    {		
-	}
-
-	public PullToRefreshScrollView(Context context, IAttributeSet attrs) 
-        :base(context, attrs)
+    public class PullToRefreshScrollView : PullToRefreshBase<ScrollView>
     {
-		
-	}
 
-	public PullToRefreshScrollView(Context context, Mode mode)
-        :base(context, mode)
-    {
-		
-	}
-
-	public PullToRefreshScrollView(Context context, Mode mode, AnimationStyle style) 
-        :base(context, mode, style)
-    {
-		 
-	}
-
-	//@Override
-	public override PTROrientation getPullToRefreshScrollDirection() {
-		return PTROrientation.VERTICAL;
-	}
-
-	//@Override
-	protected override ScrollView createRefreshableView(Context context, IAttributeSet attrs) {
-		ScrollView scrollView;
-        if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Gingerbread)
+        public PullToRefreshScrollView(Context context)
+            : base(context)
         {
-			scrollView = new InternalScrollViewSDK9(context, attrs,this);
-		} else {
-			scrollView = new ScrollView(context, attrs);
-		}
+        }
 
-		scrollView.Id=Resource.Id.scrollview;
-		return scrollView;
-	}
-
-	//@Override
-	protected override bool isReadyForPullStart() {
-		return mRefreshableView.ScrollY == 0;
-	}
-
-	//@Override
-	protected override bool isReadyForPullEnd() {
-		View scrollViewChild = mRefreshableView.GetChildAt(0);
-		if (null != scrollViewChild) {
-			return mRefreshableView.ScrollY >= (scrollViewChild.Height - Height);
-		}
-		return false;
-	}
-
-	//@TargetApi(9)
-	class InternalScrollViewSDK9 : ScrollView {
-        PullToRefreshScrollView inst;
-		public InternalScrollViewSDK9(Context context, IAttributeSet attrs,PullToRefreshScrollView instance) 
-            :base(context,attrs)
+        public PullToRefreshScrollView(Context context, IAttributeSet attrs)
+            : base(context, attrs)
         {
-			//super(context, attrs);
-            inst = instance;
-		}
 
-		//@Override
-		protected override bool OverScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
-				int scrollRangeY, int maxOverScrollX, int maxOverScrollY, bool isTouchEvent) {
+        }
 
-			bool returnValue = base.OverScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
-					scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
+        public PullToRefreshScrollView(Context context, Mode mode)
+            : base(context, mode)
+        {
 
-			// Does all of the hard work...
-            OverscrollHelper.overScrollBy(inst, deltaX, scrollX, deltaY, scrollY,
-					getScrollRange(), isTouchEvent);
+        }
 
-			return returnValue;
-		}
+        public PullToRefreshScrollView(Context context, Mode mode, AnimationStyle style)
+            : base(context, mode, style)
+        {
 
-		/**
-		 * Taken from the AOSP ScrollView source
-		 */
-		private int getScrollRange() {
-			int scrollRange = 0;
-			if (ChildCount > 0) {
-				View child = GetChildAt(0);
-				scrollRange = Math.Max(0, child.Height - (Height - PaddingBottom - PaddingTop));
-			}
-			return scrollRange;
-		}
-	}
-}
+        }
+
+        //@Override
+        public override PTROrientation getPullToRefreshScrollDirection()
+        {
+            return PTROrientation.VERTICAL;
+        }
+
+        //@Override
+        protected override ScrollView createRefreshableView(Context context, IAttributeSet attrs)
+        {
+            ScrollView scrollView;
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Gingerbread)
+            {
+                scrollView = new InternalScrollViewSDK9(context, attrs, this);
+            }
+            else
+            {
+                scrollView = new ScrollView(context, attrs);
+            }
+
+            scrollView.Id = Resource.Id.scrollview;
+            return scrollView;
+        }
+
+        //@Override
+        protected override bool isReadyForPullStart()
+        {
+            return mRefreshableView.ScrollY == 0;
+        }
+
+        //@Override
+        protected override bool isReadyForPullEnd()
+        {
+            View scrollViewChild = mRefreshableView.GetChildAt(0);
+            if (null != scrollViewChild)
+            {
+                return mRefreshableView.ScrollY >= (scrollViewChild.Height - Height);
+            }
+            return false;
+        }
+
+        //@TargetApi(9)
+        class InternalScrollViewSDK9 : ScrollView
+        {
+            PullToRefreshScrollView inst;
+            public InternalScrollViewSDK9(Context context, IAttributeSet attrs, PullToRefreshScrollView instance)
+                : base(context, attrs)
+            {
+                //super(context, attrs);
+                inst = instance;
+            }
+
+            //@Override
+            protected override bool OverScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
+                    int scrollRangeY, int maxOverScrollX, int maxOverScrollY, bool isTouchEvent)
+            {
+
+                bool returnValue = base.OverScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
+                        scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
+
+                // Does all of the hard work...
+                OverscrollHelper.overScrollBy(inst, deltaX, scrollX, deltaY, scrollY,
+                        getScrollRange(), isTouchEvent);
+
+                return returnValue;
+            }
+
+            /**
+             * Taken from the AOSP ScrollView source
+             */
+            private int getScrollRange()
+            {
+                int scrollRange = 0;
+                if (ChildCount > 0)
+                {
+                    View child = GetChildAt(0);
+                    scrollRange = Math.Max(0, child.Height - (Height - PaddingBottom - PaddingTop));
+                }
+                return scrollRange;
+            }
+        }
+    }
 
 }

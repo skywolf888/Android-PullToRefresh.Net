@@ -39,91 +39,105 @@ using Mode = Com.Handmark.PullToRefresh.Library.PtrMode;
 namespace Com.Handmark.PullToRefresh.Library.Internal
 {
 
-public class RotateLoadingLayout : LoadingLayout {
-
-	const int ROTATION_ANIMATION_DURATION = 1200;
-
-	private readonly Animation mRotateAnimation;
-	private readonly Matrix mHeaderImageMatrix;
-
-	private float mRotationPivotX, mRotationPivotY;
-
-	private readonly bool mRotateDrawableWhilePulling;
-
-	public RotateLoadingLayout(Context context, Mode mode, PtrOrientation scrollDirection, TypedArray attrs) 
-    :base(context,mode,scrollDirection,attrs)
+    public class RotateLoadingLayout : LoadingLayout
     {
-		//super(context, mode, scrollDirection, attrs);
 
-		mRotateDrawableWhilePulling = attrs.GetBoolean(Resource.Styleable.PullToRefresh_ptrRotateDrawableWhilePulling, true);
+        const int ROTATION_ANIMATION_DURATION = 1200;
 
-		mHeaderImage.SetScaleType(ImageView.ScaleType.Matrix);
-		mHeaderImageMatrix = new Matrix();
-		mHeaderImage.ImageMatrix=mHeaderImageMatrix;
+        private readonly Animation mRotateAnimation;
+        private readonly Matrix mHeaderImageMatrix;
 
-        mRotateAnimation = new RotateAnimation(0, 720, Dimension.RelativeToSelf, 0.5f, Dimension.RelativeToSelf,
-				0.5f);
-        
-		mRotateAnimation.Interpolator=ANIMATION_INTERPOLATOR;
-		mRotateAnimation.Duration=ROTATION_ANIMATION_DURATION;
-		mRotateAnimation.RepeatCount=Animation.Infinite;
-        mRotateAnimation.RepeatMode = RepeatMode.Restart;
-        
-	}
+        private float mRotationPivotX, mRotationPivotY;
 
-	protected override void onLoadingDrawableSet(Drawable imageDrawable) {
-		if (null != imageDrawable) {
-			mRotationPivotX = (int)Math.Round(imageDrawable.IntrinsicWidth / 2f);
-			mRotationPivotY = (int)Math.Round(imageDrawable.IntrinsicHeight / 2f);
-		}
-	}
-    
+        private readonly bool mRotateDrawableWhilePulling;
 
-	protected override void onPullImpl(float scaleOfLayout) {
-		float angle;
-		if (mRotateDrawableWhilePulling) {
-			angle = scaleOfLayout * 90f;
-		} else {
-			angle = Math.Max(0f, Math.Min(180f, scaleOfLayout * 360f - 180f));
-		}
+        public RotateLoadingLayout(Context context, Mode mode, PtrOrientation scrollDirection, TypedArray attrs)
+            : base(context, mode, scrollDirection, attrs)
+        {
+            //super(context, mode, scrollDirection, attrs);
 
-		mHeaderImageMatrix.SetRotate(angle, mRotationPivotX, mRotationPivotY);
-		mHeaderImage.ImageMatrix=mHeaderImageMatrix;
-	}
+            mRotateDrawableWhilePulling = attrs.GetBoolean(Resource.Styleable.PullToRefresh_ptrRotateDrawableWhilePulling, true);
 
-	//@Override
-	protected override void refreshingImpl() {
-		mHeaderImage.StartAnimation(mRotateAnimation);
-	}
+            mHeaderImage.SetScaleType(ImageView.ScaleType.Matrix);
+            mHeaderImageMatrix = new Matrix();
+            mHeaderImage.ImageMatrix = mHeaderImageMatrix;
 
-	//@Override
-	protected override void resetImpl() {
-		mHeaderImage.ClearAnimation();
-		resetImageRotation();
-	}
+            mRotateAnimation = new RotateAnimation(0, 720, Dimension.RelativeToSelf, 0.5f, Dimension.RelativeToSelf,
+                    0.5f);
 
-	private void resetImageRotation() {
-		if (null != mHeaderImageMatrix) {
-			mHeaderImageMatrix.Reset();
-			mHeaderImage.ImageMatrix=mHeaderImageMatrix;
-		}
-	}
+            mRotateAnimation.Interpolator = ANIMATION_INTERPOLATOR;
+            mRotateAnimation.Duration = ROTATION_ANIMATION_DURATION;
+            mRotateAnimation.RepeatCount = Animation.Infinite;
+            mRotateAnimation.RepeatMode = RepeatMode.Restart;
 
-	//@Override
-	protected override void pullToRefreshImpl() {
-		// NO-OP
-	}
+        }
 
-	//@Override
-	protected override void releaseToRefreshImpl() {
-		// NO-OP
-	}
+        protected override void onLoadingDrawableSet(Drawable imageDrawable)
+        {
+            if (null != imageDrawable)
+            {
+                mRotationPivotX = (int)Math.Round(imageDrawable.IntrinsicWidth / 2f);
+                mRotationPivotY = (int)Math.Round(imageDrawable.IntrinsicHeight / 2f);
+            }
+        }
 
-	//@Override
-	protected override int getDefaultDrawableResId() {
-		return Resource.Drawable.default_ptr_rotate;
-	}
 
-}
+        protected override void onPullImpl(float scaleOfLayout)
+        {
+            float angle;
+            if (mRotateDrawableWhilePulling)
+            {
+                angle = scaleOfLayout * 90f;
+            }
+            else
+            {
+                angle = Math.Max(0f, Math.Min(180f, scaleOfLayout * 360f - 180f));
+            }
+
+            mHeaderImageMatrix.SetRotate(angle, mRotationPivotX, mRotationPivotY);
+            mHeaderImage.ImageMatrix = mHeaderImageMatrix;
+        }
+
+        //@Override
+        protected override void refreshingImpl()
+        {
+            mHeaderImage.StartAnimation(mRotateAnimation);
+        }
+
+        //@Override
+        protected override void resetImpl()
+        {
+            mHeaderImage.ClearAnimation();
+            resetImageRotation();
+        }
+
+        private void resetImageRotation()
+        {
+            if (null != mHeaderImageMatrix)
+            {
+                mHeaderImageMatrix.Reset();
+                mHeaderImage.ImageMatrix = mHeaderImageMatrix;
+            }
+        }
+
+        //@Override
+        protected override void pullToRefreshImpl()
+        {
+            // NO-OP
+        }
+
+        //@Override
+        protected override void releaseToRefreshImpl()
+        {
+            // NO-OP
+        }
+
+        //@Override
+        protected override int getDefaultDrawableResId()
+        {
+            return Resource.Drawable.default_ptr_rotate;
+        }
+
+    }
 
 }

@@ -36,96 +36,107 @@ using Com.Handmark.PullToRefresh.Library.Internal;
 
 namespace Com.Handmark.PullToRefresh.Library
 {
-public class PullToRefreshExpandableListView : PullToRefreshAdapterViewBase<ExpandableListView> {
-
-	public PullToRefreshExpandableListView(Context context) 
-       :base(context)
+    public class PullToRefreshExpandableListView : PullToRefreshAdapterViewBase<ExpandableListView>
     {
-		//super(context);
-	}
 
-	public PullToRefreshExpandableListView(Context context, IAttributeSet attrs) 
-        :base(context,attrs)
-    {
-		//super(context, attrs);
-	}
-
-	public PullToRefreshExpandableListView(Context context, Mode mode) 
-        :base(context,mode)
-    {
-		//super(context, mode);
-	}
-
-	public PullToRefreshExpandableListView(Context context, Mode mode, AnimationStyle style) 
-        :base(context,mode,style)
-    {
-		//super(context, mode, style);
-	}
-
-	//@Override
-	public override PTROrientation getPullToRefreshScrollDirection() {
-		return PTROrientation.VERTICAL;
-	}
-
-	//@Override
-	protected override ExpandableListView createRefreshableView(Context context, IAttributeSet attrs) {
-		ExpandableListView lv;
-		if (Android.OS.Build.VERSION.SdkInt >=Android.OS.BuildVersionCodes.Gingerbread) {
-			lv = new InternalExpandableListViewSDK9(context, attrs,this);
-		} else {
-			lv = new InternalExpandableListView(context, attrs,this);
-		}
-
-		// Set it to this so it can be used in ListActivity/ListFragment
-		lv.Id=Android.Resource.Id.List;
-		return lv;
-	}
-
-	public class InternalExpandableListView : ExpandableListView , IEmptyViewMethodAccessor {
-
-		protected  PullToRefreshExpandableListView inst;
-		public InternalExpandableListView(Context context, IAttributeSet attrs,PullToRefreshExpandableListView instance) 
-          :base(context,attrs)
+        public PullToRefreshExpandableListView(Context context)
+            : base(context)
         {
-			//super(context, attrs);
-			inst=instance;
-		}
+            //super(context);
+        }
 
-		//@Override
-		public void setEmptyView(View emptyView) {
-			inst.setEmptyView(emptyView);
-		}
-
-		//@Override
-		public void setEmptyViewInternal(View emptyView) {
-			base.EmptyView=emptyView;
-		}
-		
-	}
-
-	//@TargetApi(9)
-	public class InternalExpandableListViewSDK9 : InternalExpandableListView {
-
-		public InternalExpandableListViewSDK9(Context context, IAttributeSet attrs,PullToRefreshExpandableListView instance) 
-        :base(context, attrs,instance)
+        public PullToRefreshExpandableListView(Context context, IAttributeSet attrs)
+            : base(context, attrs)
         {
-			//super(context, attrs,instance);
-		}
+            //super(context, attrs);
+        }
 
-		//@Override
-        protected override bool OverScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
-				int scrollRangeY, int maxOverScrollX, int maxOverScrollY, bool isTouchEvent) {
+        public PullToRefreshExpandableListView(Context context, Mode mode)
+            : base(context, mode)
+        {
+            //super(context, mode);
+        }
 
-			bool returnValue = base.OverScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
-					scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
+        public PullToRefreshExpandableListView(Context context, Mode mode, AnimationStyle style)
+            : base(context, mode, style)
+        {
+            //super(context, mode, style);
+        }
 
-			// Does all of the hard work...
-			//OverscrollHelper.overScrollBy(inst, deltaX, scrollX, deltaY, scrollY,isTouchEvent);
+        //@Override
+        public override PTROrientation getPullToRefreshScrollDirection()
+        {
+            return PTROrientation.VERTICAL;
+        }
 
-            OverscrollHelper.overScrollBy(inst, deltaX, scrollX, deltaY, scrollY, isTouchEvent);
-			return returnValue;
-		}
-	}
-}
+        //@Override
+        protected override ExpandableListView createRefreshableView(Context context, IAttributeSet attrs)
+        {
+            ExpandableListView lv;
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Gingerbread)
+            {
+                lv = new InternalExpandableListViewSDK9(context, attrs, this);
+            }
+            else
+            {
+                lv = new InternalExpandableListView(context, attrs, this);
+            }
+
+            // Set it to this so it can be used in ListActivity/ListFragment
+            lv.Id = Android.Resource.Id.List;
+            return lv;
+        }
+
+        public class InternalExpandableListView : ExpandableListView, IEmptyViewMethodAccessor
+        {
+
+            protected PullToRefreshExpandableListView inst;
+            public InternalExpandableListView(Context context, IAttributeSet attrs, PullToRefreshExpandableListView instance)
+                : base(context, attrs)
+            {
+                //super(context, attrs);
+                inst = instance;
+            }
+
+            //@Override
+            public void setEmptyView(View emptyView)
+            {
+                inst.setEmptyView(emptyView);
+            }
+
+            //@Override
+            public void setEmptyViewInternal(View emptyView)
+            {
+                base.EmptyView = emptyView;
+            }
+
+        }
+
+        //@TargetApi(9)
+        public class InternalExpandableListViewSDK9 : InternalExpandableListView
+        {
+
+            public InternalExpandableListViewSDK9(Context context, IAttributeSet attrs, PullToRefreshExpandableListView instance)
+                : base(context, attrs, instance)
+            {
+                //super(context, attrs,instance);
+            }
+
+            //@Override
+            protected override bool OverScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
+                    int scrollRangeY, int maxOverScrollX, int maxOverScrollY, bool isTouchEvent)
+            {
+
+                bool returnValue = base.OverScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
+                        scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
+
+                // Does all of the hard work...
+                //OverscrollHelper.overScrollBy(inst, deltaX, scrollX, deltaY, scrollY,isTouchEvent);
+
+                OverscrollHelper.overScrollBy(inst, deltaX, scrollX, deltaY, scrollY, isTouchEvent);
+                return returnValue;
+            }
+        }
+    }
 
 }

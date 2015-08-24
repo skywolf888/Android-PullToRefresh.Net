@@ -42,125 +42,139 @@ using Mode = Com.Handmark.PullToRefresh.Library.PtrMode;
 
 namespace Com.Handmark.PullToRefresh.Library.Internal
 {
-//@SuppressLint("ViewConstructor")
-public class IndicatorLayout : FrameLayout , Android.Views.Animations.Animation.IAnimationListener {
-
-	const int DEFAULT_ROTATION_ANIMATION_DURATION = 150;
-
-	private Animation mInAnim, mOutAnim;
-	private ImageView mArrowImageView;
-
-	private readonly Animation mRotateAnimation, mResetRotateAnimation;
-
-	public IndicatorLayout(Context context, Mode mode) 
-    
-        :base(context)
+    //@SuppressLint("ViewConstructor")
+    public class IndicatorLayout : FrameLayout, Android.Views.Animations.Animation.IAnimationListener
     {
-		//super(context);
-		mArrowImageView = new ImageView(context);
-        
-		Drawable arrowD =Resources.GetDrawable(Resource.Drawable.indicator_arrow);
-		mArrowImageView.SetImageDrawable(arrowD);
 
-		int padding = Resources.GetDimensionPixelSize(Resource.Dimension.indicator_internal_padding);
-		mArrowImageView.SetPadding(padding, padding, padding, padding);
-		AddView(mArrowImageView);
+        const int DEFAULT_ROTATION_ANIMATION_DURATION = 150;
 
-		int inAnimResId, outAnimResId;
-		switch (mode) {
-			case Mode.PULL_FROM_END:
-				inAnimResId = Resource.Animation.slide_in_from_bottom;
-				outAnimResId = Resource.Animation.slide_out_to_bottom;
-				SetBackgroundResource(Resource.Drawable.indicator_bg_bottom);
+        private Animation mInAnim, mOutAnim;
+        private ImageView mArrowImageView;
 
-				// Rotate Arrow so it's pointing the correct way
-				mArrowImageView.SetScaleType(Android.Widget.ImageView.ScaleType.Matrix);
-				Matrix matrix = new Matrix();
-                
-				matrix.SetRotate(180f, arrowD.IntrinsicWidth/ 2f, arrowD.IntrinsicHeight/ 2f);              
-				mArrowImageView.ImageMatrix=matrix;
-				break;
-			default:
-			case Mode.PULL_FROM_START:
-				inAnimResId = Resource.Animation.slide_in_from_top;
-				outAnimResId = Resource.Animation.slide_out_to_top;
-				SetBackgroundResource(Resource.Drawable.indicator_bg_top);
-				break;
-		}
+        private readonly Animation mRotateAnimation, mResetRotateAnimation;
 
-		mInAnim = AnimationUtils.LoadAnimation(context, inAnimResId);
-		mInAnim.SetAnimationListener(this);
+        public IndicatorLayout(Context context, Mode mode)
 
-		mOutAnim = AnimationUtils.LoadAnimation(context, outAnimResId);
-		mOutAnim.SetAnimationListener(this);
+            : base(context)
+        {
+            //super(context);
+            mArrowImageView = new ImageView(context);
 
-		IInterpolator interpolator = new LinearInterpolator();
-        
-        //mRotateAnimation = new RotateAnimation(0, -180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,0.5f);
-        mRotateAnimation = new RotateAnimation(0, -180, Dimension.RelativeToSelf, 0.5f, Dimension.RelativeToSelf, 0.5f);
+            Drawable arrowD = Resources.GetDrawable(Resource.Drawable.indicator_arrow);
+            mArrowImageView.SetImageDrawable(arrowD);
 
-       
-		mRotateAnimation.Interpolator=interpolator;
-		mRotateAnimation.Duration=DEFAULT_ROTATION_ANIMATION_DURATION;
-		mRotateAnimation.FillAfter=true;
+            int padding = Resources.GetDimensionPixelSize(Resource.Dimension.indicator_internal_padding);
+            mArrowImageView.SetPadding(padding, padding, padding, padding);
+            AddView(mArrowImageView);
 
-        mResetRotateAnimation = new RotateAnimation(-180, 0, Dimension.RelativeToSelf, 0.5f,
-                Dimension.RelativeToSelf, 0.5f);
-		mResetRotateAnimation.Interpolator=interpolator;
-        mResetRotateAnimation.Duration=DEFAULT_ROTATION_ANIMATION_DURATION;
-		mResetRotateAnimation.FillAfter=true;
+            int inAnimResId, outAnimResId;
+            switch (mode)
+            {
+                case Mode.PULL_FROM_END:
+                    inAnimResId = Resource.Animation.slide_in_from_bottom;
+                    outAnimResId = Resource.Animation.slide_out_to_bottom;
+                    SetBackgroundResource(Resource.Drawable.indicator_bg_bottom);
 
-	}
+                    // Rotate Arrow so it's pointing the correct way
+                    mArrowImageView.SetScaleType(Android.Widget.ImageView.ScaleType.Matrix);
+                    Matrix matrix = new Matrix();
 
-	public bool isVisible() {
+                    matrix.SetRotate(180f, arrowD.IntrinsicWidth / 2f, arrowD.IntrinsicHeight / 2f);
+                    mArrowImageView.ImageMatrix = matrix;
+                    break;
+                default:
+                case Mode.PULL_FROM_START:
+                    inAnimResId = Resource.Animation.slide_in_from_top;
+                    outAnimResId = Resource.Animation.slide_out_to_top;
+                    SetBackgroundResource(Resource.Drawable.indicator_bg_top);
+                    break;
+            }
 
-        Animation currentAnim = Animation;
-		if (null != currentAnim) {
-			return mInAnim == currentAnim;
-		}
+            mInAnim = AnimationUtils.LoadAnimation(context, inAnimResId);
+            mInAnim.SetAnimationListener(this);
 
-		return Visibility == ViewStates.Visible;
-	}
+            mOutAnim = AnimationUtils.LoadAnimation(context, outAnimResId);
+            mOutAnim.SetAnimationListener(this);
 
-	public void hide() {
-		StartAnimation(mOutAnim);
-	}
+            IInterpolator interpolator = new LinearInterpolator();
 
-	public void show() {
-		mArrowImageView.ClearAnimation();
-		StartAnimation(mInAnim);
-	}
+            //mRotateAnimation = new RotateAnimation(0, -180, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,0.5f);
+            mRotateAnimation = new RotateAnimation(0, -180, Dimension.RelativeToSelf, 0.5f, Dimension.RelativeToSelf, 0.5f);
 
-	//@Override
-	public void OnAnimationEnd(Animation animation) {
-		if (animation == mOutAnim) {
-			mArrowImageView.ClearAnimation();
-			Visibility=ViewStates.Gone;
-		} else if (animation == mInAnim) {
-			Visibility=ViewStates.Visible;
-		}
 
-		ClearAnimation();
-	}
+            mRotateAnimation.Interpolator = interpolator;
+            mRotateAnimation.Duration = DEFAULT_ROTATION_ANIMATION_DURATION;
+            mRotateAnimation.FillAfter = true;
 
-	//@Override
-	public void OnAnimationRepeat(Animation animation) {
-		// NO-OP
-	}
+            mResetRotateAnimation = new RotateAnimation(-180, 0, Dimension.RelativeToSelf, 0.5f,
+                    Dimension.RelativeToSelf, 0.5f);
+            mResetRotateAnimation.Interpolator = interpolator;
+            mResetRotateAnimation.Duration = DEFAULT_ROTATION_ANIMATION_DURATION;
+            mResetRotateAnimation.FillAfter = true;
 
-	//@Override
-	public void OnAnimationStart(Animation animation) {
-		Visibility=ViewStates.Visible;
-	}
+        }
 
-	public void releaseToRefresh() {
-		mArrowImageView.StartAnimation(mRotateAnimation);
-	}
+        public bool isVisible()
+        {
 
-	public void pullToRefresh() {
-		mArrowImageView.StartAnimation(mResetRotateAnimation);
-	}
+            Animation currentAnim = Animation;
+            if (null != currentAnim)
+            {
+                return mInAnim == currentAnim;
+            }
 
-}
+            return Visibility == ViewStates.Visible;
+        }
+
+        public void hide()
+        {
+            StartAnimation(mOutAnim);
+        }
+
+        public void show()
+        {
+            mArrowImageView.ClearAnimation();
+            StartAnimation(mInAnim);
+        }
+
+        //@Override
+        public void OnAnimationEnd(Animation animation)
+        {
+            if (animation == mOutAnim)
+            {
+                mArrowImageView.ClearAnimation();
+                Visibility = ViewStates.Gone;
+            }
+            else if (animation == mInAnim)
+            {
+                Visibility = ViewStates.Visible;
+            }
+
+            ClearAnimation();
+        }
+
+        //@Override
+        public void OnAnimationRepeat(Animation animation)
+        {
+            // NO-OP
+        }
+
+        //@Override
+        public void OnAnimationStart(Animation animation)
+        {
+            Visibility = ViewStates.Visible;
+        }
+
+        public void releaseToRefresh()
+        {
+            mArrowImageView.StartAnimation(mRotateAnimation);
+        }
+
+        public void pullToRefresh()
+        {
+            mArrowImageView.StartAnimation(mResetRotateAnimation);
+        }
+
+    }
 
 }

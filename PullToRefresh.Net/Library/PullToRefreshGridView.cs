@@ -38,94 +38,105 @@ using Com.Handmark.PullToRefresh.Library.Internal;
 namespace Com.Handmark.PullToRefresh.Library
 {
 
-public class PullToRefreshGridView : PullToRefreshAdapterViewBase<GridView> {
-
-	public PullToRefreshGridView(Context context) 
-        :base(context)
+    public class PullToRefreshGridView : PullToRefreshAdapterViewBase<GridView>
     {
-		//super(context);
-	}
 
-	public PullToRefreshGridView(Context context, IAttributeSet attrs) 
-        :base(context,attrs)
-    {
-		//super(context, attrs);
-	}
+        public PullToRefreshGridView(Context context)
+            : base(context)
+        {
+            //super(context);
+        }
 
-	public PullToRefreshGridView(Context context, Mode mode) 
-        :base(context,mode)
-    {
-		//super(context, mode);
-	}
-
-	public PullToRefreshGridView(Context context, Mode mode, AnimationStyle style) 
-        :base(context,mode,style)
-    {
-		//super(context, mode, style);
-	}
-
-	public override PtrOrientation getPullToRefreshScrollDirection() {
-		return PtrOrientation.VERTICAL;
-	}
-
-	//@Override
-	protected override GridView createRefreshableView(Context context, IAttributeSet attrs) {
-		GridView gv;
-		if (Android.OS.Build.VERSION.SdkInt >=Android.OS.BuildVersionCodes.Gingerbread) {
-			gv = new InternalGridViewSDK9(context, attrs,this);
-		} else {
-			gv = new InternalGridView(context, attrs,this);
-		}
-
-		// Use Generated ID (from res/values/ids.xml)
-		gv.Id=Resource.Id.gridview;
-		return gv;
-	}
-
-    public class InternalGridView : GridView ,IEmptyViewMethodAccessor {
-
-        protected PullToRefreshGridView inst;
-        public InternalGridView(Context context, IAttributeSet attrs,PullToRefreshGridView instance)
-            :base(context,attrs)
+        public PullToRefreshGridView(Context context, IAttributeSet attrs)
+            : base(context, attrs)
         {
             //super(context, attrs);
-            inst=instance;
         }
 
-        //@Override
-        public void setEmptyView(View emptyView) {           
-            inst.setEmptyView(emptyView);
-        }
-
-        //@Override
-        public void setEmptyViewInternal(View emptyView) {            
-            base.EmptyView=emptyView;
-        }
-    }
-
-    //@TargetApi(9)
-    public  class InternalGridViewSDK9 : InternalGridView {
-
-        public InternalGridViewSDK9(Context context, IAttributeSet attrs, PullToRefreshGridView instance)
-            :base(context,attrs,instance)
+        public PullToRefreshGridView(Context context, Mode mode)
+            : base(context, mode)
         {
-            
+            //super(context, mode);
+        }
+
+        public PullToRefreshGridView(Context context, Mode mode, AnimationStyle style)
+            : base(context, mode, style)
+        {
+            //super(context, mode, style);
+        }
+
+        public override PtrOrientation getPullToRefreshScrollDirection()
+        {
+            return PtrOrientation.VERTICAL;
         }
 
         //@Override
-        protected override bool OverScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
-                int scrollRangeY, int maxOverScrollX, int maxOverScrollY, bool isTouchEvent) {
-            
+        protected override GridView createRefreshableView(Context context, IAttributeSet attrs)
+        {
+            GridView gv;
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.Gingerbread)
+            {
+                gv = new InternalGridViewSDK9(context, attrs, this);
+            }
+            else
+            {
+                gv = new InternalGridView(context, attrs, this);
+            }
 
-            bool returnValue = base.OverScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
-                    scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
+            // Use Generated ID (from res/values/ids.xml)
+            gv.Id = Resource.Id.gridview;
+            return gv;
+        }
 
-             //Does all of the hard work...
-            OverscrollHelper.overScrollBy(inst, deltaX, scrollX, deltaY, scrollY, isTouchEvent);
+        public class InternalGridView : GridView, IEmptyViewMethodAccessor
+        {
 
-            return returnValue;
+            protected PullToRefreshGridView inst;
+            public InternalGridView(Context context, IAttributeSet attrs, PullToRefreshGridView instance)
+                : base(context, attrs)
+            {
+                //super(context, attrs);
+                inst = instance;
+            }
+
+            //@Override
+            public void setEmptyView(View emptyView)
+            {
+                inst.setEmptyView(emptyView);
+            }
+
+            //@Override
+            public void setEmptyViewInternal(View emptyView)
+            {
+                base.EmptyView = emptyView;
+            }
+        }
+
+        //@TargetApi(9)
+        public class InternalGridViewSDK9 : InternalGridView
+        {
+
+            public InternalGridViewSDK9(Context context, IAttributeSet attrs, PullToRefreshGridView instance)
+                : base(context, attrs, instance)
+            {
+
+            }
+
+            //@Override
+            protected override bool OverScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX,
+                    int scrollRangeY, int maxOverScrollX, int maxOverScrollY, bool isTouchEvent)
+            {
+
+
+                bool returnValue = base.OverScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX,
+                        scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
+
+                //Does all of the hard work...
+                OverscrollHelper.overScrollBy(inst, deltaX, scrollX, deltaY, scrollY, isTouchEvent);
+
+                return returnValue;
+            }
         }
     }
-}
 
 }
