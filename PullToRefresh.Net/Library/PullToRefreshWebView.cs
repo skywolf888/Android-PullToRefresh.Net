@@ -34,6 +34,7 @@ using PTROrientation = Com.Handmark.PullToRefresh.Library.PtrOrientation;
 using Mode = Com.Handmark.PullToRefresh.Library.PtrMode;
 using Android.OS;
 using System;
+using Android.Annotation;
 
 
 namespace Com.Handmark.PullToRefresh.Library
@@ -196,7 +197,8 @@ namespace Com.Handmark.PullToRefresh.Library
             mRefreshableView.SaveState(saveState);
         }
 
-        //@TargetApi(9)
+        
+        [TargetApi(Value=9)]
         class InternalWebViewSDK9 : WebView
         {
 

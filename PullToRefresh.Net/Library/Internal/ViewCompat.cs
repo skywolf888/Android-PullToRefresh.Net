@@ -25,6 +25,7 @@ using Android.Views;
 using Java.Lang;
 using Android.OS;
 using Android.Graphics.Drawables;
+using Android.Annotation;
 
 namespace Com.Handmark.PullToRefresh.Library.Internal
 {
@@ -54,7 +55,7 @@ public class ViewCompat {
 		}
 	}
     
-	//@TargetApi(11)
+	[TargetApi(Value=11)]
 	static class SDK11 {
 
 		public static void setLayerType(View view, int layerType) {
@@ -63,7 +64,7 @@ public class ViewCompat {
 		}
 	}
 
-	//@TargetApi(16)
+	[TargetApi(Value=16)]
 	static class SDK16 {
 
 		public static void postOnAnimation(View view, IRunnable runnable) {

@@ -33,6 +33,7 @@ using Mode = Com.Handmark.PullToRefresh.Library.PtrMode;
 using Android.Util;
 using Android.Views;
 using Com.Handmark.PullToRefresh.Library.Internal;
+using Android.Annotation;
 
 namespace Com.Handmark.PullToRefresh.Library
 {
@@ -112,7 +113,7 @@ namespace Com.Handmark.PullToRefresh.Library
 
         }
 
-        //@TargetApi(9)
+        [TargetApi(Value=9)]
         public class InternalExpandableListViewSDK9 : InternalExpandableListView
         {
 

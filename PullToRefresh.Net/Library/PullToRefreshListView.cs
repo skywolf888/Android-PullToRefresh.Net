@@ -44,6 +44,7 @@ using Android.Widget;
 using Mode = Com.Handmark.PullToRefresh.Library.PtrMode;
 using PTROrientation = Com.Handmark.PullToRefresh.Library.PtrOrientation;
 using Com.Handmark.PullToRefresh.Library.Internal;
+using Android.Annotation;
 
 
 namespace Com.Handmark.PullToRefresh.Library
@@ -306,7 +307,7 @@ namespace Com.Handmark.PullToRefresh.Library
             }
         }
 
-        //@TargetApi(9)
+        [TargetApi(Value=9)]
         public class InternalListViewSDK9 : InternalListView
         {
 

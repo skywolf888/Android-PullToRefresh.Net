@@ -15,6 +15,7 @@
  *******************************************************************************/
 //package com.handmark.pulltorefresh.library;
 
+using Android.Annotation;
 //import android.annotation.TargetApi;
 //import android.content.Context;
 //import android.os.Build.VERSION;
@@ -27,8 +28,8 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using System;
-using Mode=Com.Handmark.PullToRefresh.Library.PtrMode;
-using PTROrientation=Com.Handmark.PullToRefresh.Library.PtrOrientation;
+using Mode = Com.Handmark.PullToRefresh.Library.PtrMode;
+using PTROrientation = Com.Handmark.PullToRefresh.Library.PtrOrientation;
 
 
 namespace Com.Handmark.PullToRefresh.Library
@@ -102,7 +103,7 @@ namespace Com.Handmark.PullToRefresh.Library
             return false;
         }
 
-        //@TargetApi(9)
+        [TargetApi(Value=9)]
         class InternalHorizontalScrollViewSDK9 : HorizontalScrollView
         {
 

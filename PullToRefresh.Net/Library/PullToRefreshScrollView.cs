@@ -30,6 +30,7 @@ using Mode = Com.Handmark.PullToRefresh.Library.PtrMode;
 using Android.Util;
 using Android.Views;
 using System;
+using Android.Annotation;
 
 
 namespace Com.Handmark.PullToRefresh.Library
@@ -101,7 +102,7 @@ namespace Com.Handmark.PullToRefresh.Library
             return false;
         }
 
-        //@TargetApi(9)
+        [TargetApi(Value=9)]
         class InternalScrollViewSDK9 : ScrollView
         {
             PullToRefreshScrollView inst;

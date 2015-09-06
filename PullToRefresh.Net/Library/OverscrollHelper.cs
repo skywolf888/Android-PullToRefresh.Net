@@ -28,9 +28,11 @@ using Android.Views;
 using System;
 using Orientation = Com.Handmark.PullToRefresh.Library.PtrOrientation;
 using Mode = Com.Handmark.PullToRefresh.Library.PtrMode;
+using Android.Annotation;
+
 namespace Com.Handmark.PullToRefresh.Library
 {
-    //@TargetApi(9)
+    [TargetApi(Value=9)]
     public class OverscrollHelper
     {
 
